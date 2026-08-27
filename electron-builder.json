@@ -1,0 +1,39 @@
+{
+  "appId": "com.studentos.desktop",
+  "productName": "StudentOS",
+  "copyright": "Copyright © 2026 StudentOS",
+  "directories": {
+    "output": "dist/installer"
+  },
+  "npmRebuild": false,
+  "asarUnpack": [
+    "node_modules/.prisma/client/**",
+    "node_modules/@prisma/client/**",
+    "prisma/**"
+  ],
+  "files": [
+    "dist/**/*",
+    "src/main/**/*",
+    "src/backend/**/*",
+    "prisma/**/*",
+    "node_modules/**/*",
+    "node_modules/.prisma/**/*",
+    "package.json"
+  ],
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      }
+    ],
+    "verifyUpdateCodeSignature": false
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "StudentOS Academic Suite"
+  }
+}

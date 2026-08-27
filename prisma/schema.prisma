@@ -1,0 +1,301 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+// 1. USER AUTHENTICATION & MULTI-TENANT
+model User {
+  id                    String             @id @default(uuid())
+  username              String             @unique
+  email                 String             @unique
+  passwordHash          String
+  pinCodeHash           String?
+  profilePicture        String?
+  sessionTimeoutMins    Int                @default(30)
+  recoveryCodes         String?
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+
+  universityProfile     UniversityProfile?
+  semesters             Semester[]
+  assignments           Assignment[]
+  exams                 Exam[]
+  codeSnippets          CodeSnippet[]
+  notes                 Note[]
+  questionBank          QuestionBank[]
+  budgetCategories      BudgetCategory[]
+  transactions          Transaction[]
+  notifications         Notification[]
+  studySessions         StudySession[]
+  calendarEvents        CalendarEvent[]
+  tasks                 Task[]
+}
+
+// 2. UNIVERSITY PROFILE & ACADEMIC PROGRESS
+model UniversityProfile {
+  id                    String   @id @default(uuid())
+  userId                String   @unique
+  universityName        String?
+  department            String?
+  degreeProgram         String?
+  section               String?
+  rollNumber            String?
+  studentId             String?
+  batch                 String?
+  academicSession       String?
+  academicAdvisor       String?
+  totalRequiredCredits  Int      @default(130)
+  earnedCredits         Int      @default(0)
+  targetCgpa            Float    @default(4.00)
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// 3. SEMESTERS & COURSES
+model Semester {
+  id                    String   @id @default(uuid())
+  userId                String
+  name                  String
+  startDate             DateTime?
+  endDate               DateTime?
+  gpa                   Float    @default(0.00)
+  isCurrent             Boolean  @default(false)
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courses               Course[]
+}
+
+model Course {
+  id                    String          @id @default(uuid())
+  userId                String
+  semesterId            String
+  code                  String
+  name                  String
+  instructor            String?
+  classroom             String?
+  creditHours           Int             @default(3)
+  color                 String          @default("#3B82F6")
+  status                String          @default("ACTIVE") // ACTIVE, COMPLETED, ARCHIVED
+  createdAt             DateTime        @default(now())
+
+  semester              Semester        @relation(fields: [semesterId], references: [id], onDelete: Cascade)
+  assignments           Assignment[]
+  exams                 Exam[]
+  codeSnippets          CodeSnippet[]
+  notes                 Note[]
+  questionBank          QuestionBank[]
+  studySessions         StudySession[]
+  attendanceLogs        AttendanceLog[]
+  calendarEvents        CalendarEvent[]
+  tasks                 Task[]
+}
+
+model AttendanceLog {
+  id                    String   @id @default(uuid())
+  courseId              String
+  date                  DateTime @default(now())
+  status                String   // PRESENT, ABSENT, LATE, CANCELLED
+  remarks               String?
+
+  course                Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+// 4. CALENDAR & TIMETABLE PLANNER
+model CalendarEvent {
+  id                    String   @id @default(uuid())
+  userId                String
+  courseId              String?
+  title                 String
+  eventType             String   // CLASS, EXAM, DEADLINE, HOLIDAY, PERSONAL
+  startTime             DateTime
+  endTime               DateTime
+  location              String?
+  description           String?
+  createdAt             DateTime @default(now())
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course                Course?  @relation(fields: [courseId], references: [id], onDelete: SetNull)
+}
+
+// 5. TASKS & DEADLINE MANAGER
+model Task {
+  id                    String   @id @default(uuid())
+  userId                String
+  courseId              String?
+  title                 String
+  description           String?
+  priority              String   @default("MEDIUM") // LOW, MEDIUM, HIGH, URGENT
+  status                String   @default("TODO")   // TODO, IN_PROGRESS, COMPLETED
+  dueDate               DateTime
+  isRecurring           Boolean  @default(false)
+  recurrencePattern     String?
+  createdAt             DateTime @default(now())
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course                Course?  @relation(fields: [courseId], references: [id], onDelete: SetNull)
+}
+
+// 6. ASSIGNMENTS & EXAMS
+model Assignment {
+  id                    String   @id @default(uuid())
+  userId                String
+  courseId              String
+  title                 String
+  description           String?
+  dueDate               DateTime
+  submissionStatus      String   @default("PENDING") // PENDING, SUBMITTED, GRADED, OVERDUE
+  totalMarks            Float    @default(100)
+  obtainedMarks         Float?
+  teacherFeedback       String?
+  attachedFilePath      String?
+  createdAt             DateTime @default(now())
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course                Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+model Exam {
+  id                    String   @id @default(uuid())
+  userId                String
+  courseId              String
+  title                 String
+  examType              String   // QUIZ, MIDTERM, FINAL, PRACTICAL, VIVA
+  examDate              DateTime
+  totalMarks            Float    @default(100)
+  obtainedMarks         Float?
+  weightagePercent      Float?
+  createdAt             DateTime @default(now())
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course                Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+// 7. PROGRAMMING WORKSPACE & CODE SNIPPETS
+model CodeSnippet {
+  id                    String   @id @default(uuid())
+  userId                String
+  courseId              String?
+  title                 String
+  language              String
+  codeContent           String
+  explanation           String?
+  githubUrl             String?
+  tags                  String?
+  isFavorite            Boolean  @default(false)
+  createdAt             DateTime @default(now())
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course                Course?  @relation(fields: [courseId], references: [id], onDelete: SetNull)
+}
+
+// 8. RICH NOTES & QUESTION BANK WITH SPACED REPETITION FLASHCARDS
+model Note {
+  id                    String   @id @default(uuid())
+  userId                String
+  courseId              String?
+  title                 String
+  contentJson           String?
+  markdownText          String?
+  category              String?
+  isPinned              Boolean  @default(false)
+  isFavorite            Boolean  @default(false)
+  isLocked              Boolean  @default(false)
+  color                 String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course                Course?  @relation(fields: [courseId], references: [id], onDelete: SetNull)
+}
+
+model QuestionBank {
+  id                    String   @id @default(uuid())
+  userId                String
+  courseId              String
+  subject               String?
+  chapter               String?
+  topic                 String?
+  questionType          String   // MCQ, SHORT, LONG, PRACTICAL, VIVA, CODING, PAST_PAPER
+  difficulty            String   // EASY, MEDIUM, HARD
+  question              String
+  answer                String?
+  explanation           String?
+  marks                 Int      @default(1)
+  
+  // Spaced Repetition Flashcard Fields
+  nextReviewDate        DateTime @default(now())
+  intervalDays          Int      @default(1)
+  easeFactor            Float    @default(2.5)
+  reviewCount           Int      @default(0)
+
+  createdAt             DateTime @default(now())
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course                Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  options               QuestionOption[]
+}
+
+model QuestionOption {
+  id                    String       @id @default(uuid())
+  questionId            String
+  optionText            String
+  isCorrect             Boolean      @default(false)
+
+  questionBank          QuestionBank @relation(fields: [questionId], references: [id], onDelete: Cascade)
+}
+
+// 9. BUDGET & TRANSACTIONS
+model BudgetCategory {
+  id                    String        @id @default(uuid())
+  userId                String
+  name                  String
+  type                  String        // INCOME, EXPENSE
+  monthlyLimit          Float         @default(0.00)
+
+  user                  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions          Transaction[]
+}
+
+model Transaction {
+  id                    String         @id @default(uuid())
+  userId                String
+  categoryId            String
+  type                  String         // INCOME, EXPENSE
+  amount                Float
+  description           String?
+  transactionDate       DateTime
+  createdAt             DateTime       @default(now())
+
+  user                  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category              BudgetCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+}
+
+// 10. NOTIFICATIONS & STUDY SESSIONS
+model Notification {
+  id                    String   @id @default(uuid())
+  userId                String
+  title                 String
+  message               String
+  type                  String?  // DEADLINE, EXAM, BUDGET, GOAL, SYSTEM
+  isRead                Boolean  @default(false)
+  createdAt             DateTime @default(now())
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model StudySession {
+  id                    String   @id @default(uuid())
+  userId                String
+  courseId              String?
+  durationMinutes       Int
+  sessionDate           DateTime
+  notes                 String?
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course                Course?  @relation(fields: [courseId], references: [id], onDelete: SetNull)
+}

@@ -1,0 +1,90 @@
+/* StudentOS Global Custom Scrollbar & Visual Polish */
+@import "tailwindcss";
+
+/* Custom Sleek Dark Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(51, 65, 85, 0.5);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.8);
+}
+
+/* Glassmorphism Backdrop Blur Utilities */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(51, 65, 85, 0.6);
+}
+
+.glass-card {
+  background: rgba(30, 41, 59, 0.4);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  transition: all 0.2s ease-in-out;
+}
+.glass-card:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  transform: translateY(-1px);
+}
+
+/* StudentOS Dynamic Custom Theme Palette Overrides */
+html[data-theme="nordic-white"] body,
+html[data-theme="nordic-white"] .bg-slate-950 {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+html[data-theme="nordic-white"] .bg-slate-900,
+html[data-theme="nordic-white"] .bg-slate-900\/60,
+html[data-theme="nordic-white"] aside {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+html[data-theme="cyberpunk-neon"] body,
+html[data-theme="cyberpunk-neon"] .bg-slate-950 {
+  background-color: #090d16 !important;
+}
+html[data-theme="cyberpunk-neon"] .bg-slate-900,
+html[data-theme="cyberpunk-neon"] .bg-slate-900\/60,
+html[data-theme="cyberpunk-neon"] aside {
+  background-color: #121829 !important;
+}
+
+html[data-theme="emerald-forest"] body,
+html[data-theme="emerald-forest"] .bg-slate-950 {
+  background-color: #062016 !important;
+}
+html[data-theme="emerald-forest"] .bg-slate-900,
+html[data-theme="emerald-forest"] .bg-slate-900\/60,
+html[data-theme="emerald-forest"] aside {
+  background-color: #0b2e21 !important;
+}
+
+html[data-theme="mocha-coffee"] body,
+html[data-theme="mocha-coffee"] .bg-slate-950 {
+  background-color: #1c1412 !important;
+}
+html[data-theme="mocha-coffee"] .bg-slate-900,
+html[data-theme="mocha-coffee"] .bg-slate-900\/60,
+html[data-theme="mocha-coffee"] aside {
+  background-color: #2a1e1b !important;
+}
+
+html[data-theme="dracula-purple"] body,
+html[data-theme="dracula-purple"] .bg-slate-950 {
+  background-color: #181124 !important;
+}
+html[data-theme="dracula-purple"] .bg-slate-900,
+html[data-theme="dracula-purple"] .bg-slate-900\/60,
+html[data-theme="dracula-purple"] aside {
+  background-color: #221935 !important;
+}
