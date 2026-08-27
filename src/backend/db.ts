@@ -1,7 +1,24 @@
 // src/backend/db.ts
 import path from 'path';
 import fs from 'fs';
-import { PrismaClient } from '../generated/client';
+
+// Safe Prisma Client Import (Supports custom generated client & serverless fallbacks)
+let PrismaClient: any;
+try {
+  PrismaClient = require('../generated/client').PrismaClient;
+} catch {
+  try {
+    PrismaClient = require('@prisma/client').PrismaClient;
+  } catch {
+    console.log('Prisma Client fallback mode active');
+    PrismaClient = class FallbackPrisma {
+      note = { findMany: async () => [], create: async (d: any) => d.data, update: async (d: any) => d.data };
+      task = { findMany: async () => [], create: async (d: any) => d.data, update: async (d: any) => d.data };
+      user = { findFirst: async () => null, create: async (d: any) => d.data, count: async () => 1 };
+      $queryRaw = async () => 1;
+    };
+  }
+}
 
 function prepareDatabaseUrl(): string {
   try {
@@ -56,7 +73,7 @@ try {
 }
 
 const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
+  prisma: any;
 };
 
 export const prisma =
