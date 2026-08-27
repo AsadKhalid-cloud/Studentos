@@ -1,18 +1,9 @@
 {
   "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "src/backend/server.ts",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["prisma/dev.db", "prisma/schema.prisma"]
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "src/backend/server.ts"
+      "source": "/(.*)",
+      "destination": "/api"
     }
   ]
 }
