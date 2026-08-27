@@ -3,7 +3,22 @@ import fs from 'fs';
 import { PrismaClient } from '../generated/client';
 
 function prepareDatabaseUrl(): string {
-  // 1. Determine Writable AppData Directory
+  // 0. Special Handling for Vercel Serverless (/tmp directory is the ONLY writable directory on AWS Lambda)
+  if (process.env.VERCEL) {
+    const tmpDbPath = '/tmp/dev.db';
+    const localTemplate = path.resolve(process.cwd(), 'prisma', 'dev.db');
+
+    if (!fs.existsSync(tmpDbPath) && fs.existsSync(localTemplate)) {
+      try {
+        fs.copyFileSync(localTemplate, tmpDbPath);
+      } catch (e) {
+        console.error('Failed to copy SQLite template to /tmp:', e);
+      }
+    }
+    return 'file:/tmp/dev.db';
+  }
+
+  // 1. Determine Writable AppData Directory (Desktop / Local)
   const appData = process.env.APPDATA || (process.platform === 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + '/.local/share');
   const dbDir = path.join(appData, 'studentos');
 
