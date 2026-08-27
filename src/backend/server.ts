@@ -221,8 +221,10 @@ app.use('/api/v1/ai', aiRoutes);
 app.use('/api/v1/ocr', ocrRoutes);
 
 // Start Local Express Server with Universal 0.0.0.0 Host Binding
-app.listen(Number(PORT), '0.0.0.0', () => {
-  console.log(`[StudentOS Backend] Express server running on http://127.0.0.1:${PORT}`);
-});
-
+// Start Local Express Server (Only when NOT running on Vercel Serverless)
+if (!process.env.VERCEL) {
+  app.listen(Number(PORT), '0.0.0.0', () => {
+    console.log(`[StudentOS Backend] Express server running on http://127.0.0.1:${PORT}`);
+  });
+}
 export default app;

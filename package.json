@@ -5,6 +5,8 @@
   "type": "module",
   "main": "src/main/main.cjs",
   "scripts": {
+ 
+  "vercel-build": "prisma generate",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:server": "esbuild src/backend/server.ts --bundle --platform=node --target=node20 --format=cjs --outfile=dist/server.cjs",
