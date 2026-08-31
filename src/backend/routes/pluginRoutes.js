@@ -5,7 +5,7 @@ const router = Router();
 // Built-in Themes Marketplace Catalog
 const MARKETPLACE_THEMES = [
     {
-        id: 'nordic-white',
+        id: 'nordic-white (Default)',
         name: 'Nordic Frost White ☀️',
         description: 'Minimalist crisp white theme for daylight study sessions.',
         colors: { bg: '#f8fafc', sidebar: '#ffffff', accent: '#2563eb', text: '#0f172a' },
@@ -13,7 +13,7 @@ const MARKETPLACE_THEMES = [
     },
     {
         id: 'dark-default',
-        name: 'Midnight Slate (Default)',
+        name: 'Midnight Slate ',
         description: 'Clean, high-contrast dark theme optimized for late-night study sessions.',
         colors: { bg: '#0f172a', sidebar: '#1e293b', accent: '#3b82f6', text: '#f8fafc' },
         isOfficial: true

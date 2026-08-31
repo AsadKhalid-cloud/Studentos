@@ -47,8 +47,9 @@ export default function AuthPage() {
           degreeProgram: formData.degreeProgram
         };
 
-    // Direct Fast Local Wi-Fi API Base URL
-    const API_BASE_URL = 'http://192.168.10.180:4000';
+    // Auto-Detect Environment (Laptop Browser -> 127.0.0.1:4000 | Mobile App -> 192.168.10.180:4000)
+    const isCapacitorMobile = typeof window !== 'undefined' && (window as any).Capacitor !== undefined;
+    const API_BASE_URL = isCapacitorMobile ? 'http://192.168.10.180:4000' : 'http://127.0.0.1:4000';
 
     try {
       const res = await fetch(`${API_BASE_URL}/api/v1/auth/${endpoint}`, {
@@ -69,7 +70,7 @@ export default function AuthPage() {
       login(data.token, data.user);
     } catch (err: any) {
       console.error('Auth Error Detail:', err);
-      setError(err?.message || 'Connection Error. Please check backend server.');
+      setError(err?.message || 'Cannot connect to Express backend. Ensure "npx tsx src/backend/server.ts" is running!');
     } finally {
       setLoading(false);
     }
@@ -80,10 +81,9 @@ export default function AuthPage() {
       <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-8 text-left">
         {/* Header Branding */}
         <div className="text-center mb-8">
-          {/* CUSTOM LOGO ON LOGIN SCREEN */}
-<div className="inline-flex p-2.5 rounded-2xl bg-slate-950 border border-slate-800 mb-3 shadow-md">
-  <img src="/images/logo.png" alt="StudentOS Logo" className="w-10 h-10 object-contain rounded-xl" />
-</div>
+          <div className="inline-flex p-3 rounded-2xl bg-blue-500/10 border border-blue-500/20 mb-3">
+            <ShieldCheck className="w-8 h-8 text-blue-400 mx-auto" />
+          </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">StudentOS</h1>
           <p className="text-xs text-slate-400 mt-1">Academic & Life Management System</p>
         </div>

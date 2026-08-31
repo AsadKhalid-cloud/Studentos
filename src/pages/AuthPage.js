@@ -42,7 +42,8 @@ export default function AuthPage() {
                 degreeProgram: formData.degreeProgram
             };
         // Direct Fast Local Wi-Fi API Base URL
-        const API_BASE_URL = 'http://192.168.10.180:4000';
+        // src/pages/AuthPage.tsx
+        const API_BASE_URL = 'http://127.0.0.1:4000';
         try {
             const res = await fetch(`${API_BASE_URL}/api/v1/auth/${endpoint}`, {
                 method: 'POST',

@@ -19,9 +19,9 @@ import CommandPalette from './component/common/CommandPalette';
 import PomodoroModal from './component/layout/PomodoroModal';
 import AiAssistantDrawer from './component/layout/AiAssistantDrawer';
 import { ArlamModal } from './component/layout/ArlamModal';
-import { initSavedTheme } from './backend/utils/themeUtils';
 
 export default function App() {
+  // 1. ALL HOOKS AT THE VERY TOP OF FUNCTION (React Rules of Hooks)
   const { user, loading } = useAuth();
   const [activeTab, setActiveTab] = useState<ActiveTab>('dashboard');
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
@@ -36,12 +36,8 @@ export default function App() {
     if (historyStack[historyStack.length - 1] !== activeTab) {
       historyStack.push(activeTab);
       sessionStorage.setItem('studentos_tab_history', JSON.stringify(historyStack));
- 
     }
-     // App Boot - Initialize Saved Theme (Applies to Login Screen & Workspace)
-  useEffect(() => {
-    initSavedTheme();
-  }, []);
+
     const handleTabChangeEvent = (e: any) => {
       if (e.detail) {
         setActiveTab(e.detail);
@@ -52,7 +48,7 @@ export default function App() {
     return () => window.removeEventListener('studentos-tab-change', handleTabChangeEvent);
   }, [activeTab]);
 
-  // 1. Loading Screen
+  // 2. CONDITIONAL EARLY RETURNS (AFTER ALL HOOKS)
   if (loading) {
     return (
       <div className="min-h-screen w-full bg-slate-950 flex flex-col items-center justify-center text-slate-100 select-none">
@@ -62,7 +58,7 @@ export default function App() {
     );
   }
 
-  // 2. Unauthenticated -> Show Auth Page
+  // Unauthenticated -> Show Auth Page
   if (!user) {
     return <AuthPage />;
   }
@@ -97,10 +93,10 @@ export default function App() {
     }
   };
 
-  // 3. Authenticated -> Render Full Application Shell
+  // 3. MAIN RENDER SHELL
   return (
     <div className="h-screen w-screen bg-slate-950 text-slate-100 flex font-sans overflow-hidden">
-      {/* Sidebar Navigation (With Mobile Drawer Support) */}
+      {/* Sidebar Navigation */}
       <Sidebar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
@@ -142,7 +138,7 @@ export default function App() {
         onClose={() => setIsAiOpen(false)} 
       />
 
-      {/* Calendar & Timetable Live Class Alarm Modal */}
+      {/* Calendar Alarm Modal */}
       <ArlamModal onGoToCalendar={() => setActiveTab('calendar')} />
     </div>
   );

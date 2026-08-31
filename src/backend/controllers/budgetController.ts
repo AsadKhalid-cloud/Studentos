@@ -24,7 +24,7 @@ export async function getBudgetSummary(req: Request, res: Response): Promise<voi
     let totalIncome = 0;
     let totalExpense = 0;
 
-    transactions.forEach(t => {
+    transactions.forEach((t: any) => {
       if (t.type === 'INCOME') {
         totalIncome += t.amount;
       } else if (t.type === 'EXPENSE') {
@@ -39,9 +39,10 @@ export async function getBudgetSummary(req: Request, res: Response): Promise<voi
       where: { userId }
     });
 
-    const categoryStats = categories.map(cat => {
-      const catTransactions = transactions.filter(t => t.categoryId === cat.id);
-      const spentAmount = catTransactions.reduce((acc, t) => acc + t.amount, 0);
+   const categoryStats = categories.map((cat: any) => {
+
+      const catTransactions = transactions.filter((t: any) => t.categoryId === cat.id);
+  const spentAmount = catTransactions.reduce((acc: any, t: any) => acc + t.amount, 0);
 
       return {
         ...cat,

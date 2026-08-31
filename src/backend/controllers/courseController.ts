@@ -24,7 +24,7 @@ export async function getCourses(req: Request, res: Response): Promise<void> {
 
     // Fetch attendance summary per course
     const coursesWithAttendance = await Promise.all(
-      courses.map(async (course) => {
+      courses.map(async (course: any) => {
         const attendanceLogs = await prisma.attendanceLog.findMany({
           where: { courseId: course.id }
         });

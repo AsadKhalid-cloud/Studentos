@@ -18,7 +18,7 @@ export async function getBudgetSummary(req, res) {
         // Calculate Total Income & Expenses
         let totalIncome = 0;
         let totalExpense = 0;
-        transactions.forEach(t => {
+        transactions.forEach((t) => {
             if (t.type === 'INCOME') {
                 totalIncome += t.amount;
             }
@@ -31,8 +31,8 @@ export async function getBudgetSummary(req, res) {
         const categories = await prisma.budgetCategory.findMany({
             where: { userId }
         });
-        const categoryStats = categories.map(cat => {
-            const catTransactions = transactions.filter(t => t.categoryId === cat.id);
+        const categoryStats = categories.map((cat) => {
+            const catTransactions = transactions.filter((t) => t.categoryId === cat.id);
             const spentAmount = catTransactions.reduce((acc, t) => acc + t.amount, 0);
             return {
                 ...cat,

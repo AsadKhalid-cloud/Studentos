@@ -21,7 +21,7 @@ export async function getKnowledgeGraphData(req: Request, res: Response): Promis
     const links: any[] = [];
 
     // 1. Add Course Nodes
-    courses.forEach(c => {
+    courses.forEach((c: any) => {
       nodes.push({
         id: `course-${c.id}`,
         label: `${c.code} - ${c.name}`,
@@ -33,7 +33,7 @@ export async function getKnowledgeGraphData(req: Request, res: Response): Promis
     });
 
     // 2. Add Note Nodes & Links
-    notes.forEach(n => {
+    notes.forEach((n: any) => {
       const nodeId = `note-${n.id}`;
       nodes.push({
         id: nodeId,
@@ -54,7 +54,7 @@ export async function getKnowledgeGraphData(req: Request, res: Response): Promis
     });
 
     // 3. Add Question Nodes & Links
-    questions.forEach(q => {
+    questions.forEach((q:any) => {
       const nodeId = `question-${q.id}`;
       nodes.push({
         id: nodeId,
@@ -75,7 +75,7 @@ export async function getKnowledgeGraphData(req: Request, res: Response): Promis
     });
 
     // 4. Add Code Snippet Nodes & Links
-    codeSnippets.forEach(cs => {
+    codeSnippets.forEach((cs:any) => {
       const nodeId = `code-${cs.id}`;
       nodes.push({
         id: nodeId,

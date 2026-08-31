@@ -11,6 +11,8 @@
     "skipLibCheck": true,
     "verbatimModuleSyntax": false,
     "isolatedModules": true
+    
+    
   },
   "include": ["src/**/*", "scripts/**/*"]
 }

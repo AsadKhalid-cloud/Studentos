@@ -1,24 +1,7 @@
 // src/backend/db.ts
 import path from 'path';
 import fs from 'fs';
-
-// Safe Prisma Client Import (Supports custom generated client & serverless fallbacks)
-let PrismaClient: any;
-try {
-  PrismaClient = require('../generated/client').PrismaClient;
-} catch {
-  try {
-    PrismaClient = require('@prisma/client').PrismaClient;
-  } catch {
-    console.log('Prisma Client fallback mode active');
-    PrismaClient = class FallbackPrisma {
-      note = { findMany: async () => [], create: async (d: any) => d.data, update: async (d: any) => d.data };
-      task = { findMany: async () => [], create: async (d: any) => d.data, update: async (d: any) => d.data };
-      user = { findFirst: async () => null, create: async (d: any) => d.data, count: async () => 1 };
-      $queryRaw = async () => 1;
-    };
-  }
-}
+import { PrismaClient } from '../generated/client';
 
 function prepareDatabaseUrl(): string {
   try {
@@ -59,21 +42,16 @@ function prepareDatabaseUrl(): string {
     const normalizedPath = dbPath.replace(/\\/g, '/');
     return `file:${normalizedPath}`;
   } catch (err) {
-    console.error('Database URL prep error, using fallback:', err);
+    console.error('Database URL prep error:', err);
     return 'file:/tmp/dev.db';
   }
 }
 
-let activeDbUrl = 'file:/tmp/dev.db';
-try {
-  activeDbUrl = prepareDatabaseUrl();
-  process.env.DATABASE_URL = activeDbUrl;
-} catch (e) {
-  console.error('Top-level DB prep error:', e);
-}
+const activeDbUrl = prepareDatabaseUrl();
+process.env.DATABASE_URL = activeDbUrl;
 
 const globalForPrisma = globalThis as unknown as {
-  prisma: any;
+  prisma: PrismaClient | undefined;
 };
 
 export const prisma =

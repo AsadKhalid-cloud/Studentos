@@ -19,7 +19,7 @@ export async function getStudySessionStats(req: Request, res: Response): Promise
       orderBy: { sessionDate: 'desc' }
     });
 
-    const totalMinutes = sessions.reduce((sum, s) => sum + s.durationMinutes, 0);
+   const totalMinutes = sessions.reduce((sum: any, s: any) => sum + s.durationMinutes, 0);
     const totalHours = (totalMinutes / 60).toFixed(1);
 
     res.status(200).json({

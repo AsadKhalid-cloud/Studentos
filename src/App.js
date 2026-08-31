@@ -21,6 +21,7 @@ import PomodoroModal from './component/layout/PomodoroModal';
 import AiAssistantDrawer from './component/layout/AiAssistantDrawer';
 import { ArlamModal } from './component/layout/ArlamModal';
 export default function App() {
+    // 1. ALL HOOKS AT THE VERY TOP OF FUNCTION (React Rules of Hooks)
     const { user, loading } = useAuth();
     const [activeTab, setActiveTab] = useState('dashboard');
     const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -43,11 +44,11 @@ export default function App() {
         window.addEventListener('studentos-tab-change', handleTabChangeEvent);
         return () => window.removeEventListener('studentos-tab-change', handleTabChangeEvent);
     }, [activeTab]);
-    // 1. Loading Screen
+    // 2. CONDITIONAL EARLY RETURNS (AFTER ALL HOOKS)
     if (loading) {
         return (_jsxs("div", { className: "min-h-screen w-full bg-slate-950 flex flex-col items-center justify-center text-slate-100 select-none", children: [_jsx("div", { className: "w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4" }), _jsx("p", { className: "text-xs font-mono text-slate-400", children: "Loading StudentOS Workspace..." })] }));
     }
-    // 2. Unauthenticated -> Show Auth Page
+    // Unauthenticated -> Show Auth Page
     if (!user) {
         return _jsx(AuthPage, {});
     }
@@ -80,6 +81,6 @@ export default function App() {
                 return _jsx(DashboardPage, { setActiveTab: setActiveTab });
         }
     };
-    // 3. Authenticated -> Render Full Application Shell
+    // 3. MAIN RENDER SHELL
     return (_jsxs("div", { className: "h-screen w-screen bg-slate-950 text-slate-100 flex font-sans overflow-hidden", children: [_jsx(Sidebar, { activeTab: activeTab, setActiveTab: setActiveTab, isOpenMobile: isMobileSidebarOpen, onCloseMobile: () => setIsMobileSidebarOpen(false) }), _jsxs("div", { className: "flex-1 flex flex-col min-w-0 h-screen bg-slate-950 overflow-hidden", children: [_jsx(Header, { activeTab: activeTab, onOpenMobileSidebar: () => setIsMobileSidebarOpen(true), onOpenQuickAdd: () => setActiveTab('notes'), onOpenSearch: () => setIsSearchOpen(true), onOpenTimer: () => setIsTimerOpen(true), onOpenAi: () => setIsAiOpen(true) }), _jsx("main", { className: "flex-1 min-h-0 overflow-y-auto custom-scrollbar", children: renderTabContent() })] }), _jsx(CommandPalette, { isOpen: isSearchOpen, onClose: () => setIsSearchOpen(false), setActiveTab: setActiveTab }), _jsx(PomodoroModal, { isOpen: isTimerOpen, onClose: () => setIsTimerOpen(false) }), _jsx(AiAssistantDrawer, { isOpen: isAiOpen, onClose: () => setIsAiOpen(false) }), _jsx(ArlamModal, { onGoToCalendar: () => setActiveTab('calendar') })] }));
 }

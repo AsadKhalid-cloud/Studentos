@@ -18,16 +18,16 @@ export async function getAnalytics(req, res) {
         ]);
         // 1. Task Completion Stats
         const totalTasks = tasks.length;
-        const completedTasks = tasks.filter(t => t.status === 'COMPLETED').length;
+        const completedTasks = tasks.filter((t) => t.status === 'COMPLETED').length;
         const taskCompletionRatio = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 100;
         // 2. Class Attendance Stats
         const totalClasses = attendanceLogs.length;
-        const presentClasses = attendanceLogs.filter(a => a.status === 'PRESENT' || a.status === 'LATE').length;
+        const presentClasses = attendanceLogs.filter((a) => a.status === 'PRESENT' || a.status === 'LATE').length;
         const attendanceRatio = totalClasses > 0 ? Math.round((presentClasses / totalClasses) * 100) : 100;
         // 3. Financial Health Stats
         let totalIncome = 0;
         let totalExpense = 0;
-        transactions.forEach(t => {
+        transactions.forEach((t) => {
             if (t.type === 'INCOME')
                 totalIncome += t.amount;
             if (t.type === 'EXPENSE')

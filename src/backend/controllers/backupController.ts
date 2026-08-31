@@ -125,7 +125,7 @@ export async function importBackup(req: Request, res: Response): Promise<void> {
     const { userData } = backupData;
 
     // Restore Data inside a Transaction
-    await prisma.$transaction(async (tx) => {
+  await prisma.$transaction(async (tx: any) => {
       // 1. Restore Notes
       if (Array.isArray(userData.notes)) {
         for (const note of userData.notes) {

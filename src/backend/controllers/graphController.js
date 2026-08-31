@@ -15,7 +15,7 @@ export async function getKnowledgeGraphData(req, res) {
         const nodes = [];
         const links = [];
         // 1. Add Course Nodes
-        courses.forEach(c => {
+        courses.forEach((c) => {
             nodes.push({
                 id: `course-${c.id}`,
                 label: `${c.code} - ${c.name}`,
@@ -26,7 +26,7 @@ export async function getKnowledgeGraphData(req, res) {
             });
         });
         // 2. Add Note Nodes & Links
-        notes.forEach(n => {
+        notes.forEach((n) => {
             const nodeId = `note-${n.id}`;
             nodes.push({
                 id: nodeId,
@@ -45,7 +45,7 @@ export async function getKnowledgeGraphData(req, res) {
             }
         });
         // 3. Add Question Nodes & Links
-        questions.forEach(q => {
+        questions.forEach((q) => {
             const nodeId = `question-${q.id}`;
             nodes.push({
                 id: nodeId,
@@ -64,7 +64,7 @@ export async function getKnowledgeGraphData(req, res) {
             }
         });
         // 4. Add Code Snippet Nodes & Links
-        codeSnippets.forEach(cs => {
+        codeSnippets.forEach((cs) => {
             const nodeId = `code-${cs.id}`;
             nodes.push({
                 id: nodeId,

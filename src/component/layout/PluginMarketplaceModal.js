@@ -7,42 +7,42 @@ import { useAuth } from '../../context/AuthContext';
 const DEFAULT_THEMES = [
     {
         id: 'nordic-white',
-        name: 'Nordic Frost White ☀️',
+        name: 'Nordic Frost White (Default)',
         description: 'Minimalist crisp white theme for daylight study sessions.',
         colors: { bg: '#f8fafc', sidebar: '#ffffff', accent: '#2563eb', text: '#0f172a' },
         isOfficial: true
     },
     {
         id: 'dark-default',
-        name: 'Midnight Slate (Default)',
+        name: 'Midnight Slate ',
         description: 'Clean, high-contrast dark theme optimized for late-night study sessions.',
         colors: { bg: '#0f172a', sidebar: '#1e293b', accent: '#3b82f6', text: '#f8fafc' },
         isOfficial: true
     },
     {
         id: 'cyberpunk-neon',
-        name: 'Cyberpunk Neon 🌌',
+        name: 'Cyberpunk Neon ',
         description: 'Vibrant neon blue and violet accents inspired by futuristic IDEs.',
         colors: { bg: '#090d16', sidebar: '#121829', accent: '#a855f7', text: '#f4f4f5' },
         isOfficial: true
     },
     {
         id: 'emerald-forest',
-        name: 'Emerald Forest 🌲',
+        name: 'Emerald Forest ',
         description: 'Calming deep green tones to reduce eye strain during long reading hours.',
         colors: { bg: '#062016', sidebar: '#0b2e21', accent: '#10b981', text: '#ecfdf5' },
         isOfficial: true
     },
     {
         id: 'mocha-coffee',
-        name: 'Mocha Coffee ☕',
+        name: 'Mocha Coffee ',
         description: 'Warm espresso and caramel tones for a cozy academic environment.',
         colors: { bg: '#1c1412', sidebar: '#2a1e1b', accent: '#f59e0b', text: '#fffbeb' },
         isOfficial: true
     },
     {
         id: 'dracula-purple',
-        name: 'Dracula Obsidian 🧛',
+        name: 'Dracula Obsidian ',
         description: 'Classic dark purple palette beloved by programmers and power users.',
         colors: { bg: '#181124', sidebar: '#221935', accent: '#8b5cf6', text: '#f3e8ff' },
         isOfficial: true
